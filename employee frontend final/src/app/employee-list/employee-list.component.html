@@ -25,10 +25,10 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            <!-- <th>Salary</th> -->
+            <th>Salary</th>
             <th>Department</th>
             <th>Designation</th>
-            <!-- <th>Joining Date</th> -->
+            <th>Joining Date</th>
             <th>Actions</th>
         </tr>
 
@@ -41,10 +41,10 @@
             <td>{{employee.fname}}</td>
             <td>{{employee.lname}}</td>
             <td>{{employee.email}}</td>
-            <!-- <td>{{employee.salary}}</td> -->
+            <td>{{employee.salary | salaryFormat}}</td>
             <td>{{employee.department}}</td>
             <td>{{employee.designation}}</td>
-            <!-- <td>{{employee.joiningDate}}</td> -->
+            <td>{{employee.joiningDate | customDate}}</td>
             <td>
                 <button (click) = "updateEmployee(employee.id)" class = "btn  btn-secondary btn-sm"> Update</button>
                 <button (click) = "deleteEmployee(employee.id)" class = "btn btn-danger btn-sm" style="margin-left: 10px"> Delete</button>

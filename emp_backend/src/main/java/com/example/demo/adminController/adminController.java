@@ -13,6 +13,7 @@ import com.example.demo.adminRepository.adminRepository;
 
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:38893", "http://127.0.0.1:4200", "http://127.0.0.1:38893"})
 @RequestMapping("/api/v1/")
 public class adminController {
 	

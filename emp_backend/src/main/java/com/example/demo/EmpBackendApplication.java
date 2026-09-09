@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @SpringBootApplication
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:38893", "http://127.0.0.1:4200", "http://127.0.0.1:38893"})
 public class EmpBackendApplication {
 
 	public static void main(String[] args) {

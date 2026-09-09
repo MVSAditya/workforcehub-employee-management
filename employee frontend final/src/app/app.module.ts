@@ -21,6 +21,8 @@ import { ShowDetailsComponent } from './show-details/show-details.component';
 import { HomeComponent } from './home/home.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SalaryFormatPipe } from './salary-format.pipe';
+import { CustomDatePipe } from './custom-date.pipe';
 
 
 
@@ -28,11 +30,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   declarations: [
     AppComponent,
     EmployeeListComponent,
-    
     AddEmployeeComponent,
-         UpdateEmployeeComponent,
-         ShowDetailsComponent,
-         AdminLoginComponent
+    UpdateEmployeeComponent,
+    ShowDetailsComponent,
+    AdminLoginComponent,
+    SalaryFormatPipe,
+    CustomDatePipe
   ],
   imports: [
     BrowserModule,

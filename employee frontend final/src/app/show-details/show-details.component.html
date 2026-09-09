@@ -40,7 +40,7 @@
         </tr>
         <tr>
           <td><b>Salary</b></td>
-          <td>{{employee.salary}}</td>
+          <td>{{employee.salary | salaryFormat}}</td>
         </tr>
         <tr>
           <td><b>Department</b></td>
@@ -52,7 +52,7 @@
         </tr>
         <tr>
           <td><b>Joining Date</b></td>
-          <td>{{employee.joiningDate}}</td>
+          <td>{{employee.joiningDate | customDate}}</td>
         </tr>
 
     </tbody>    

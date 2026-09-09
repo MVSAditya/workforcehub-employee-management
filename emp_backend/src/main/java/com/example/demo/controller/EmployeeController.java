@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:38893", "http://127.0.0.1:4200", "http://127.0.0.1:38893"})
 @RequestMapping("/api/v1/")
 public class EmployeeController {
 
