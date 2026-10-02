@@ -26,3 +26,167 @@
 
     display: block;
 }
+
+.ltac-window {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    width: min(340px, calc(100vw - 32px));
+    max-height: 42vh;
+    min-height: 190px;
+    overflow: hidden;
+    color: #202923;
+    background: #f8faf7;
+    border: 1px solid #b7c4b8;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgb(22 36 25 / 20%);
+    font-size: 13px;
+}
+
+.ltac-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 13px;
+    color: #fff;
+    background: #1f392b;
+}
+
+.ltac-header strong {
+    margin-right: 8px;
+    font-size: 15px;
+}
+
+.ltac-header span {
+    font-size: 10px;
+}
+
+.ltac-total {
+    white-space: nowrap;
+}
+
+.ltac-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ltac-share {
+    padding: 5px 8px;
+    color: #fff;
+    background: #315c40;
+    border: 1px solid #9db4a2;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.ltac-share:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.ltac-share:focus-visible {
+    outline: 2px solid #dbe9dc;
+    outline-offset: 2px;
+}
+
+.ltac-share-status {
+    margin: 0;
+    padding: 7px 10px;
+    color: #27573b;
+    background: #e8eee7;
+    font-size: 11px;
+}
+
+.ltac-feed {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.ltac-empty {
+    margin: auto;
+    color: #59675d;
+}
+
+.ltac-message {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background: #e8eee7;
+    border-radius: 6px;
+}
+
+.ltac-message-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.ltac-count {
+    color: #27573b;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.ltac-finding {
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.ltac-message-error {
+    background: #f7e3e1;
+    border-left: 3px solid #a02e27;
+}
+
+.ltac-message-error .ltac-finding {
+    color: #8a211b;
+}
+
+.ltac-message-warning,
+.ltac-message-pending {
+    background: #f5eedc;
+    border-left: 3px solid #9a7627;
+}
+
+.ltac-message-warning .ltac-finding,
+.ltac-message-pending .ltac-finding {
+    color: #745613;
+}
+
+.ltac-message-pass .ltac-finding {
+    color: #27573b;
+}
+
+.ltac-message p {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.ltac-message small {
+    display: block;
+    margin-top: 4px;
+    color: #59675d;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+    .ltac-window {
+        right: 8px;
+        bottom: 8px;
+        max-height: 34vh;
+    }
+}

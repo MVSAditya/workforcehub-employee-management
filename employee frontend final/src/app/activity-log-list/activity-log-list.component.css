@@ -1,0 +1,11 @@
+.table thead th {
+  font-size: 0.78rem;
+  letter-spacing: 0.04rem;
+  text-transform: uppercase;
+}
+
+.badge {
+  min-width: 90px;
+  display: inline-block;
+  text-align: center;
+}

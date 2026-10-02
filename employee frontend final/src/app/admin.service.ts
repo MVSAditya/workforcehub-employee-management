@@ -12,7 +12,11 @@ export interface Admin {
   providedIn: 'root'
 })
 export class AdminService {
-  private baseURL = 'http://localhost:8080/api/v1/admins';
+  private baseURL = '/api/v1/admins';
+  static readonly DEFAULT_ADMIN = {
+    adminName: 'admin_4827',
+    adminPassword: 'R4nd0m!A7'
+  };
 
   constructor(private httpClient: HttpClient) {}
 

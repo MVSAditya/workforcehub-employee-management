@@ -23,8 +23,7 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SalaryFormatPipe } from './salary-format.pipe';
 import { CustomDatePipe } from './custom-date.pipe';
-
-
+import { ActivityLogListComponent } from './activity-log-list/activity-log-list.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +33,7 @@ import { CustomDatePipe } from './custom-date.pipe';
     UpdateEmployeeComponent,
     ShowDetailsComponent,
     AdminLoginComponent,
+    ActivityLogListComponent,
     SalaryFormatPipe,
     CustomDatePipe
   ],

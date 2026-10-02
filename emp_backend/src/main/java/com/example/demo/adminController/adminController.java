@@ -24,7 +24,7 @@ public class adminController {
 	
 	//get all 
 	
-	@GetMapping("/admin")
+	@GetMapping({"/admin", "/admins"})
 	public List <adminModel> getAllAdmins(){
 		return repo.findAll();
 	}

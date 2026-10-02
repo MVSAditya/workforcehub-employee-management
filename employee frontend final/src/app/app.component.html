@@ -9,6 +9,9 @@
         <li class="nav-item">
             <a routerLink="add-employee" routerLinkActive="active" class="nav-link">Add Employee</a>
         </li>
+        <li class="nav-item">
+            <a routerLink="activity-log" routerLinkActive="active" class="nav-link">Activity Log</a>
+        </li>
     </ul>
     <ul class="navbar-nav ms-auto">
         <li class="nav-item" style="margin-right: 4rem;">
@@ -43,4 +46,34 @@
         <span>Employee Management System</span>
     </div>
 </footer>
+
+<aside class="ltac-window" aria-label="LTAC live activity chat">
+    <ng-container *ngIf="liveActions$ | async as actions">
+        <header class="ltac-header">
+            <div>
+                <strong>LTAC</strong>
+                <span>LIVE TRACKER</span>
+            </div>
+            <div class="ltac-tools">
+                <span class="ltac-total">{{ actions.length ? actions[0].count : 0 }} live</span>
+                <button type="button" class="ltac-share" (click)="copySessionReport()"
+                    title="Copy saved and current LTAC actions to paste into chat">Copy for chat</button>
+            </div>
+        </header>
+        <p class="ltac-share-status" role="status" *ngIf="shareStatus">{{ shareStatus }}</p>
+        <div class="ltac-feed" aria-live="polite" aria-relevant="additions">
+            <p class="ltac-empty" *ngIf="actions.length === 0">Waiting for activity...</p>
+            <article class="ltac-message" *ngFor="let action of actions"
+                [ngClass]="'ltac-message-' + action.finding.toLowerCase()">
+                <div class="ltac-message-topline">
+                    <span class="ltac-count">COUNT {{ action.count }}</span>
+                    <span class="ltac-finding">{{ action.finding }}</span>
+                </div>
+                <p><strong>Expected:</strong> {{ action.expected }}</p>
+                <p><strong>Actual:</strong> {{ action.actual }}</p>
+                <small>{{ action.action }} · {{ action.page }}</small>
+            </article>
+        </div>
+    </ng-container>
+</aside>
 
