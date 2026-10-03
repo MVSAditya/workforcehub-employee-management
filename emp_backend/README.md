@@ -2,12 +2,12 @@
 
 The default Spring profile uses the existing file-based H2 database. To use MySQL, start a MySQL Server reachable from the machine running this backend, then activate the `mysql` profile. MySQL Workbench is a client; the backend connects to the MySQL Server instance that Workbench uses.
 
-The MySQL profile defaults to the `emp` database and `root` username. It creates the database if needed and lets Hibernate create or update the application tables. Set the password locally rather than storing it in this repository:
+The MySQL profile defaults to a separate `workforcehub` database and the `root` username. It creates the database if needed and lets Hibernate create or update the application tables. The existing `emp` database is not modified. Set the password locally rather than storing it in this repository:
 
 ```sh
 export MYSQL_HOST=localhost
 export MYSQL_PORT=3306
-export MYSQL_DATABASE=emp
+export MYSQL_DATABASE=workforcehub
 export MYSQL_USERNAME=root
 export MYSQL_PASSWORD='your-local-mysql-password'
 SPRING_PROFILES_ACTIVE=mysql ./mvnw spring-boot:run
