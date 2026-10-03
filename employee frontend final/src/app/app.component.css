@@ -16,6 +16,95 @@
     font-size: 3rem;
 }
 
+.feature-visibility {
+    align-items: center;
+    margin-left: 1rem;
+}
+
+.feature-visibility .nav-item {
+    margin-left: 0;
+}
+
+.visibility-options {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.visibility-option {
+    padding: 5px 9px;
+    color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.visibility-visible {
+    background: #287342;
+}
+
+.visibility-invisible {
+    background: #a3312b;
+}
+
+.visibility-option:not(.selected) {
+    opacity: 0.65;
+}
+
+.visibility-option.selected {
+    border-color: #fff;
+}
+
+.visibility-option:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.additional-features {
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+    margin-left: 1rem;
+    padding: 4px 10px;
+    background: #1f2a23;
+    border: 1px solid #59675d;
+    border-radius: 6px;
+}
+
+.additional-feature-label {
+    margin-left: 0.25rem;
+    color: #c4d0c7;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.additional-features .nav-item {
+    margin-left: 0.25rem;
+}
+
+.account-nav {
+    padding-left: 1rem;
+    border-left: 1px solid #59675d;
+}
+
+.account-nav .nav-item {
+    margin-left: 0.75rem;
+}
+
+.advanced-controls-toggle,
+.account-logout {
+    color: inherit;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
 
 .logout-option {
     display: none;

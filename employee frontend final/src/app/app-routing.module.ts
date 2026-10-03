@@ -7,6 +7,7 @@ import { ShowDetailsComponent } from './show-details/show-details.component';
 import { HomeComponent } from './home/home.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { ActivityLogListComponent } from './activity-log-list/activity-log-list.component';
+import { AdminAuthService } from './admin-auth.service';
 
 const routes: Routes = [
   { path: 'show-all-employees', component: EmployeeListComponent },
@@ -16,7 +17,7 @@ const routes: Routes = [
   { path: 'details-of-employee/:id', component: ShowDetailsComponent },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: AdminLoginComponent },
-  { path: 'activity-log', component: ActivityLogListComponent }
+  { path: 'activity-log', component: ActivityLogListComponent, canActivate: [AdminAuthService] }
 ];
 
 @NgModule({

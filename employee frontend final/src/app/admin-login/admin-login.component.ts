@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from '../admin.service';
 import { ActivityLogService } from '../activity-log.service';
+import { AdminAuthService } from '../admin-auth.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -17,7 +18,8 @@ export class AdminLoginComponent {
   constructor(
     private adminService: AdminService,
     private router: Router,
-    private activityLogService: ActivityLogService
+    private activityLogService: ActivityLogService,
+    private adminAuthService: AdminAuthService
   ) {}
 
   login() {
@@ -41,6 +43,7 @@ export class AdminLoginComponent {
         'SUCCESS',
         this.username.trim()
       ).subscribe();
+      this.adminAuthService.login();
       this.router.navigate(['/show-all-employees']);
       return;
     }
@@ -59,6 +62,7 @@ export class AdminLoginComponent {
             'SUCCESS',
             this.username
           ).subscribe();
+          this.adminAuthService.login();
           this.router.navigate(['/show-all-employees']);
         } else {
           this.errorMessage = 'Invalid username or password';

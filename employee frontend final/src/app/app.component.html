@@ -9,15 +9,41 @@
         <li class="nav-item">
             <a routerLink="add-employee" routerLinkActive="active" class="nav-link">Add Employee</a>
         </li>
+    </ul>
+    <ul *ngIf="isAdminAuthenticated$ | async" class="navbar-nav feature-visibility" aria-label="Additional features visibility">
+        <li class="nav-item">
+            <div class="visibility-options" role="group" aria-label="Additional features visibility">
+                <button type="button" class="visibility-option visibility-visible"
+                    [class.selected]="additionalFeaturesVisible"
+                    [attr.aria-pressed]="additionalFeaturesVisible"
+                    (click)="setAdditionalFeaturesVisible(true)">Visible</button>
+                <button type="button" class="visibility-option visibility-invisible"
+                    [class.selected]="!additionalFeaturesVisible"
+                    [attr.aria-pressed]="!additionalFeaturesVisible"
+                    (click)="setAdditionalFeaturesVisible(false)">Invisible</button>
+            </div>
+        </li>
+    </ul>
+    <ul *ngIf="(isAdminAuthenticated$ | async) && additionalFeaturesVisible"
+        class="navbar-nav additional-features" aria-label="Additional features">
+        <li class="additional-feature-label" aria-hidden="true">Additional Features</li>
         <li class="nav-item">
             <a routerLink="activity-log" routerLinkActive="active" class="nav-link">Activity Log</a>
         </li>
+        <li class="nav-item">
+            <button type="button" class="nav-link advanced-controls-toggle"
+                (click)="toggleAdvancedControls()"
+                [attr.aria-expanded]="advancedControlsVisible"
+                aria-controls="ltac-panel">Advanced Controls</button>
+        </li>
     </ul>
-    <ul class="navbar-nav ms-auto">
-        <li class="nav-item" style="margin-right: 4rem;">
+    <ul class="navbar-nav ms-auto account-nav">
+        <li class="nav-item" *ngIf="!(isAdminAuthenticated$ | async)">
             <a routerLink="login" routerLinkActive="active" class="nav-link">Admin Login 
-                <span  class="logout-option" id="logoutOption"><a routerLink="" routerLinkActive="active" class="nav-link">Logout</a></span>
             </a>
+        </li>
+        <li class="nav-item" *ngIf="isAdminAuthenticated$ | async">
+            <button type="button" class="nav-link account-logout" (click)="logout()">Logout</button>
         </li>
     </ul>
 </nav>
@@ -47,7 +73,7 @@
     </div>
 </footer>
 
-<aside class="ltac-window" aria-label="LTAC live activity chat">
+<aside *ngIf="(isAdminAuthenticated$ | async) && additionalFeaturesVisible && advancedControlsVisible" id="ltac-panel" class="ltac-window" aria-label="LTAC live activity chat">
     <ng-container *ngIf="liveActions$ | async as actions">
         <header class="ltac-header">
             <div>

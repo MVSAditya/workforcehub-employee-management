@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ActivityLog } from './activity-log';
 import { ActivityLogService } from './activity-log.service';
+import { AdminAuthService } from './admin-auth.service';
 
 @Component({
   selector: 'app-root',
@@ -10,13 +11,38 @@ import { ActivityLogService } from './activity-log.service';
 })
 export class AppComponent {
   title = 'frontend';
+  additionalFeaturesVisible = false;
+  advancedControlsVisible = false;
+  isAdminAuthenticated$ = this.adminAuthService.isAuthenticated$;
   liveActions$ = this.activityLogService.liveActions$;
   shareStatus = '';
   historyLoaded = false;
   historyLoadError = false;
   private savedActions: ActivityLog[] = [];
 
-  constructor(private router: Router, private activityLogService: ActivityLogService) {
+  toggleAdvancedControls(): void {
+    this.advancedControlsVisible = !this.advancedControlsVisible;
+  }
+
+  setAdditionalFeaturesVisible(visible: boolean): void {
+    this.additionalFeaturesVisible = visible;
+    if (!visible) {
+      this.advancedControlsVisible = false;
+    }
+  }
+
+  logout(): void {
+    this.adminAuthService.logout();
+    this.additionalFeaturesVisible = false;
+    this.advancedControlsVisible = false;
+    this.router.navigate(['/login']);
+  }
+
+  constructor(
+    private router: Router,
+    private activityLogService: ActivityLogService,
+    private adminAuthService: AdminAuthService
+  ) {
     this.activityLogService.getLogs().subscribe({
       next: (actions) => {
         this.savedActions = actions;
