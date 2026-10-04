@@ -1,0 +1,6 @@
+.git
+**/node_modules
+**/target
+**/dist
+**/.angular
+emp_backend/data

@@ -43,16 +43,22 @@ export class AppComponent {
     private activityLogService: ActivityLogService,
     private adminAuthService: AdminAuthService
   ) {
-    this.activityLogService.getLogs().subscribe({
-      next: (actions) => {
-        this.savedActions = actions;
-        this.historyLoaded = true;
-      },
-      error: () => {
-        this.historyLoadError = true;
-        this.historyLoaded = true;
-        this.shareStatus = 'Could not load previous LTAC history. Refresh to retry.';
+    this.adminAuthService.isAuthenticated$.subscribe((authenticated) => {
+      if (!authenticated) {
+        return;
       }
+      this.activityLogService.getLogs().subscribe({
+        next: (actions) => {
+          this.savedActions = actions;
+          this.historyLoaded = true;
+        },
+        error: (error) => {
+          this.historyLoadError = true;
+          this.historyLoaded = true;
+          this.shareStatus = 'Could not load previous LTAC history. Refresh to retry.';
+          console.error('Unable to load previous LTAC history', error);
+        }
+      });
     });
 
     this.router.events.subscribe((event) => {

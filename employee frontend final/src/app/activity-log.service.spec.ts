@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ActivityLog } from './activity-log';
 import { ActivityLogService } from './activity-log.service';
+import { AdminAuthService } from './admin-auth.service';
 
 describe('ActivityLogService workflow assessment', () => {
   let service: ActivityLogService;
@@ -16,7 +17,10 @@ describe('ActivityLogService workflow assessment', () => {
   });
 
   beforeEach(() => {
-    service = new ActivityLogService({} as unknown as HttpClient);
+    service = new ActivityLogService(
+      {} as HttpClient,
+      { isAuthenticated: false } as AdminAuthService
+    );
   });
 
   it('flags a failed backend action as an error against its expected workflow', () => {

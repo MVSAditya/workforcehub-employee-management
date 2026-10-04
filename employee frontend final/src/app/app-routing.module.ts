@@ -10,11 +10,11 @@ import { ActivityLogListComponent } from './activity-log-list/activity-log-list.
 import { AdminAuthService } from './admin-auth.service';
 
 const routes: Routes = [
-  { path: 'show-all-employees', component: EmployeeListComponent },
-  { path: 'add-employee', component: AddEmployeeComponent },
+  { path: 'show-all-employees', component: EmployeeListComponent, canActivate: [AdminAuthService] },
+  { path: 'add-employee', component: AddEmployeeComponent, canActivate: [AdminAuthService] },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'updating-by-id/:id', component: UpdateEmployeeComponent },
-  { path: 'details-of-employee/:id', component: ShowDetailsComponent },
+  { path: 'updating-by-id/:id', component: UpdateEmployeeComponent, canActivate: [AdminAuthService] },
+  { path: 'details-of-employee/:id', component: ShowDetailsComponent, canActivate: [AdminAuthService] },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: AdminLoginComponent },
   { path: 'activity-log', component: ActivityLogListComponent, canActivate: [AdminAuthService] }

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { ActivityLog } from './activity-log';
+import { AdminAuthService } from './admin-auth.service';
 
 export interface LiveAction extends ActivityLog {
   count: number;
@@ -40,13 +41,16 @@ export class ActivityLogService {
   private readonly liveActionsSubject = new BehaviorSubject<LiveAction[]>([]);
   readonly liveActions$ = this.liveActionsSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private adminAuthService: AdminAuthService) {}
 
   getLogs(): Observable<ActivityLog[]> {
     return this.http.get<ActivityLog[]>(this.baseUrl);
   }
 
   addLog(log: ActivityLog): Observable<ActivityLog> {
+    if (!this.adminAuthService.isAuthenticated) {
+      return of(log);
+    }
     return this.http.post<ActivityLog>(this.baseUrl, log);
   }
 
