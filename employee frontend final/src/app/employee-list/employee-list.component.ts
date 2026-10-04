@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Employee } from '../employee';
 import { EmployeeService } from '../employee.service';
 import { Router } from '@angular/router';
-import { ActivityLogService } from '../activity-log.service';
+import { LtacService } from '../ltac.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -17,13 +17,13 @@ export class EmployeeListComponent {
   constructor(
     private employeeService: EmployeeService,
     private router: Router,
-    private activityLogService: ActivityLogService
+    private ltacService: LtacService
   ) {
     this.employees = [];
   }
 
   ngOnInit(): void {
-    this.activityLogService.logAction(
+    this.ltacService.trackAction(
       'VIEW_EMPLOYEE_LIST',
       '/show-all-employees',
       'User opened the employee list',
@@ -41,7 +41,7 @@ export class EmployeeListComponent {
     this.employeeService.getEmployeesList().subscribe({
       next: (data) => {
         this.employees = data;
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'EMPLOYEE_LIST_REFRESH',
           '/show-all-employees',
           `Loaded ${data.length} employees`,
@@ -50,7 +50,7 @@ export class EmployeeListComponent {
       },
       error: (err) => {
         console.error(err);
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'EMPLOYEE_LIST_ERROR',
           '/show-all-employees',
           'Error loading employee list',
@@ -61,7 +61,7 @@ export class EmployeeListComponent {
   }
 
   updateEmployee(id: number) {
-    this.activityLogService.logAction(
+    this.ltacService.trackAction(
       'UPDATE_EMPLOYEE_OPEN',
       '/show-all-employees',
       `Opening update form for employee ${id}`,
@@ -75,7 +75,7 @@ export class EmployeeListComponent {
       this.employeeService.deleteEmployee(id).subscribe({
         next: (data) => {
           console.log(data);
-          this.activityLogService.logAction(
+          this.ltacService.trackAction(
             'DELETE_EMPLOYEE_SUCCESS',
             '/show-all-employees',
             `Deleted employee ${id}`,
@@ -85,7 +85,7 @@ export class EmployeeListComponent {
         },
         error: (err) => {
           console.error(err);
-          this.activityLogService.logAction(
+          this.ltacService.trackAction(
             'DELETE_EMPLOYEE_FAILED',
             '/show-all-employees',
             `Failed to delete employee ${id}`,
@@ -97,7 +97,7 @@ export class EmployeeListComponent {
   }
 
   detailsOfEmployee(id: number) {
-    this.activityLogService.logAction(
+    this.ltacService.trackAction(
       'VIEW_EMPLOYEE_DETAILS',
       '/show-all-employees',
       `Viewing employee ${id}`,

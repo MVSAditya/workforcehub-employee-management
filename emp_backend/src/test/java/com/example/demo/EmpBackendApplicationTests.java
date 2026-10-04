@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.demo.model.ActivityLog;
-import com.example.demo.repository.ActivityLogRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootTest
 class EmpBackendApplicationTests {
@@ -17,7 +16,7 @@ class EmpBackendApplicationTests {
 	private String datasourceUrl;
 
 	@Autowired
-	private ActivityLogRepository activityLogRepository;
+	private JdbcTemplate jdbcTemplate;
 
 	@Test
 	void contextLoads() {
@@ -30,18 +29,18 @@ class EmpBackendApplicationTests {
 	}
 
 	@Test
-	void activityLogRepositoryShouldSaveAuditEntries() {
-		ActivityLog log = new ActivityLog();
-		log.setUser("admin_4827");
-		log.setPage("/login");
-		log.setAction("LOGIN");
-		log.setDetails("Admin login attempted");
-		log.setStatus("INFO");
+	void databaseShouldOnlyHaveEmployeeAndAdminDataTables() {
+		assertThat(tableExists("EMPLOYEES_TABLE")).isTrue();
+		assertThat(tableExists("ADMIN")).isTrue();
+		assertThat(tableExists("ACTIVITY_LOG")).isFalse();
+	}
 
-		ActivityLog saved = activityLogRepository.save(log);
-
-		assertThat(saved.getId()).isGreaterThan(0);
-		assertThat(activityLogRepository.findById(saved.getId())).isPresent();
+	private boolean tableExists(String tableName) {
+		return jdbcTemplate.queryForObject(
+			"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE LOWER(TABLE_NAME) = LOWER(?)",
+			Integer.class,
+			tableName
+		) > 0;
 	}
 
 }

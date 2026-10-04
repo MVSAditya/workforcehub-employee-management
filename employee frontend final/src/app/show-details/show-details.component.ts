@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Employee } from '../employee';
 import { EmployeeService } from '../employee.service';
 import { ActivatedRoute } from '@angular/router';
-import { ActivityLogService } from '../activity-log.service';
+import { LtacService } from '../ltac.service';
 
 @Component({
   selector: 'app-show-details',
@@ -17,7 +17,7 @@ export class ShowDetailsComponent {
   constructor(
     private route: ActivatedRoute,
     private employeService: EmployeeService,
-    private activityLogService: ActivityLogService
+    private ltacService: LtacService
   ) {
     this.id = 0;
   }
@@ -25,7 +25,7 @@ export class ShowDetailsComponent {
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
 
-    this.activityLogService.logAction(
+    this.ltacService.trackAction(
       'VIEW_EMPLOYEE_DETAILS',
       `/details-of-employee/${this.id}`,
       `Viewing employee record ${this.id}`,
@@ -36,7 +36,7 @@ export class ShowDetailsComponent {
     this.employeService.getEmployeeById(this.id).subscribe({
       next: (data) => {
         this.employee = data;
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'VIEW_EMPLOYEE_DETAILS_SUCCESS',
           `/details-of-employee/${this.id}`,
           `Employee ${this.id} loaded successfully`,
@@ -45,7 +45,7 @@ export class ShowDetailsComponent {
       },
       error: (err) => {
         console.error(err);
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'VIEW_EMPLOYEE_DETAILS_FAILED',
           `/details-of-employee/${this.id}`,
           `Could not load employee ${this.id}`,

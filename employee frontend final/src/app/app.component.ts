@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { ActivityLog } from './activity-log';
-import { ActivityLogService } from './activity-log.service';
+import { LtacAction } from './ltac-action';
+import { LtacService } from './ltac.service';
 import { AdminAuthService } from './admin-auth.service';
 
 @Component({
@@ -14,11 +14,8 @@ export class AppComponent {
   additionalFeaturesVisible = false;
   advancedControlsVisible = false;
   isAdminAuthenticated$ = this.adminAuthService.isAuthenticated$;
-  liveActions$ = this.activityLogService.liveActions$;
+  liveActions$ = this.ltacService.liveActions$;
   shareStatus = '';
-  historyLoaded = false;
-  historyLoadError = false;
-  private savedActions: ActivityLog[] = [];
 
   toggleAdvancedControls(): void {
     this.advancedControlsVisible = !this.advancedControlsVisible;
@@ -40,30 +37,12 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    private activityLogService: ActivityLogService,
+    private ltacService: LtacService,
     private adminAuthService: AdminAuthService
   ) {
-    this.adminAuthService.isAuthenticated$.subscribe((authenticated) => {
-      if (!authenticated) {
-        return;
-      }
-      this.activityLogService.getLogs().subscribe({
-        next: (actions) => {
-          this.savedActions = actions;
-          this.historyLoaded = true;
-        },
-        error: (error) => {
-          this.historyLoadError = true;
-          this.historyLoaded = true;
-          this.shareStatus = 'Could not load previous LTAC history. Refresh to retry.';
-          console.error('Unable to load previous LTAC history', error);
-        }
-      });
-    });
-
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'PAGE_VIEW',
           event.urlAfterRedirects,
           'User opened page',
@@ -86,7 +65,7 @@ export class AppComponent {
       ).slice(0, 60);
       const page = this.router.url || '/';
 
-      this.activityLogService.logAction(
+      this.ltacService.trackAction(
         'WEB_CLICK',
         page,
         `User clicked: ${label}`,
@@ -101,7 +80,7 @@ export class AppComponent {
       }
 
       const fieldName = field.id || field.getAttribute('name') || field.type || 'text-field';
-      this.activityLogService.logAction(
+      this.ltacService.trackAction(
         'FIELD_INPUT',
         this.router.url || '/',
         `User entered text in: ${fieldName}`,
@@ -116,7 +95,7 @@ export class AppComponent {
       }
 
       const fieldName = field.id || field.name || 'select-field';
-      this.activityLogService.logAction(
+      this.ltacService.trackAction(
         'FIELD_CHANGE',
         this.router.url || '/',
         `User changed selection: ${fieldName}`,
@@ -127,7 +106,7 @@ export class AppComponent {
     document.addEventListener('submit', (event: Event) => {
       const form = event.target;
       const formName = form instanceof HTMLFormElement ? form.id || form.getAttribute('name') : null;
-      this.activityLogService.logAction(
+      this.ltacService.trackAction(
         'FORM_SUBMIT',
         this.router.url || '/',
         `User submitted form: ${formName || 'unnamed-form'}`,
@@ -138,28 +117,14 @@ export class AppComponent {
 
   async copySessionReport(): Promise<void> {
     await Promise.resolve();
-    const allActions = [...this.savedActions];
-    const knownActions = new Set(allActions.map(action => this.actionKey(action)));
+    const allActions = this.ltacService.getSessionActions();
 
-    for (const action of this.activityLogService.getSessionActions()) {
-      const key = this.actionKey(action);
-      if (!knownActions.has(key)) {
-        allActions.push(action);
-        knownActions.add(key);
-      }
-    }
-
-    allActions.sort((left, right) =>
-      new Date(left.timestamp).getTime() - new Date(right.timestamp).getTime()
-    );
-
-    const completeHistoryAvailable = this.historyLoaded && !this.historyLoadError;
     const report = [
-      `LTAC ${completeHistoryAvailable ? 'complete history' : 'current-tab actions only'}: ${allActions.length} actions`,
+      `LTAC current-tab actions: ${allActions.length} actions`,
       ...allActions.flatMap((action, index) => {
-        const assessment = this.activityLogService.evaluateAction(action, index + 1);
+        const assessment = this.ltacService.evaluateAction(action, index + 1);
         return [
-          `COUNT ${index + 1} | ID ${action.id ?? 'pending'} | ${action.timestamp} | ${action.user} | ${action.action} | ${action.status} | ${action.page}`,
+          `COUNT ${index + 1} | ${action.timestamp} | ${action.user} | ${action.action} | ${action.status} | ${action.page}`,
           `  EXPECTED: ${assessment.expected}`,
           `  ACTUAL: ${assessment.actual}`,
           `  ASSESSMENT: ${assessment.finding}`
@@ -169,15 +134,10 @@ export class AppComponent {
 
     try {
       await navigator.clipboard.writeText(report);
-      this.shareStatus = completeHistoryAvailable
-        ? `Copied ${allActions.length} actions from all sessions. Paste the report into this chat.`
-        : `Copied ${allActions.length} current-tab actions. Previous history is still loading or unavailable.`;
+      this.shareStatus = `Copied ${allActions.length} current-tab actions. Paste the report into this chat.`;
     } catch {
       this.shareStatus = 'Clipboard access failed. Allow clipboard access and try again.';
     }
   }
 
-  private actionKey(action: ActivityLog): string {
-    return [action.user, action.page, action.action, action.status, action.timestamp, action.details || ''].join('\0');
-  }
 }

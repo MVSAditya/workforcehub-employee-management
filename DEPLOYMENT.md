@@ -37,7 +37,7 @@ next visit. Neon and Render enforce free-tier quotas and policies; this
 configuration has no paid service selected, but neither provider guarantees
 unlimited capacity or permanent availability on its free tier.
 
-The application requires a server-side admin session for employee and activity
-log APIs. The session cookie is HTTPS-only and same-site in the Render
+The application requires a server-side admin session for employee APIs. The
+session cookie is HTTPS-only and same-site in the Render
 PostgreSQL profile. Set or rotate the admin credentials in the Render service
 environment and redeploy if needed.

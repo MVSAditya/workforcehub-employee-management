@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActivityLogService } from '../activity-log.service';
+import { LtacService } from '../ltac.service';
 import { AdminAuthService } from '../admin-auth.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class AdminLoginComponent {
 
   constructor(
     private router: Router,
-    private activityLogService: ActivityLogService,
+    private ltacService: LtacService,
     private adminAuthService: AdminAuthService
   ) {}
 
@@ -24,7 +24,7 @@ export class AdminLoginComponent {
     this.errorMessage = '';
     this.adminAuthService.login(this.username.trim(), this.password).subscribe({
       next: () => {
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'LOGIN_SUCCESS',
           '/login',
           'Admin login succeeded',

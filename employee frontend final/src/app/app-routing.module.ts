@@ -6,7 +6,6 @@ import { UpdateEmployeeComponent } from './update-employee/update-employee.compo
 import { ShowDetailsComponent } from './show-details/show-details.component';
 import { HomeComponent } from './home/home.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
-import { ActivityLogListComponent } from './activity-log-list/activity-log-list.component';
 import { AdminAuthService } from './admin-auth.service';
 
 const routes: Routes = [
@@ -16,8 +15,7 @@ const routes: Routes = [
   { path: 'updating-by-id/:id', component: UpdateEmployeeComponent, canActivate: [AdminAuthService] },
   { path: 'details-of-employee/:id', component: ShowDetailsComponent, canActivate: [AdminAuthService] },
   { path: 'home', component: HomeComponent },
-  { path: 'login', component: AdminLoginComponent },
-  { path: 'activity-log', component: ActivityLogListComponent, canActivate: [AdminAuthService] }
+  { path: 'login', component: AdminLoginComponent }
 ];
 
 @NgModule({

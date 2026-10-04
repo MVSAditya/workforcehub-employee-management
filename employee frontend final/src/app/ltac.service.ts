@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { ActivityLog } from './activity-log';
-import { AdminAuthService } from './admin-auth.service';
+import { LtacAction } from './ltac-action';
 
-export interface LiveAction extends ActivityLog {
+export interface LiveAction extends LtacAction {
   count: number;
   expected: string;
   actual: string;
@@ -34,31 +32,17 @@ const fallbackExpectation = 'Define an expected workflow for this action.';
 @Injectable({
   providedIn: 'root'
 })
-export class ActivityLogService {
-  private baseUrl = '/api/v1/activity-logs';
+export class LtacService {
   private actionCount = 0;
   private readonly sessionActions: LiveAction[] = [];
   private readonly liveActionsSubject = new BehaviorSubject<LiveAction[]>([]);
   readonly liveActions$ = this.liveActionsSubject.asObservable();
 
-  constructor(private http: HttpClient, private adminAuthService: AdminAuthService) {}
-
-  getLogs(): Observable<ActivityLog[]> {
-    return this.http.get<ActivityLog[]>(this.baseUrl);
-  }
-
-  addLog(log: ActivityLog): Observable<ActivityLog> {
-    if (!this.adminAuthService.isAuthenticated) {
-      return of(log);
-    }
-    return this.http.post<ActivityLog>(this.baseUrl, log);
-  }
-
   getSessionActions(): LiveAction[] {
     return [...this.sessionActions];
   }
 
-  evaluateAction(log: ActivityLog, count: number): LiveAction {
+  evaluateAction(log: LtacAction, count: number): LiveAction {
     const action = log.action.toUpperCase();
     const normalizedAction = action.replace(/_(ATTEMPT|SUCCESS|FAILED|ERROR|INVALID|REFRESH|OPEN)$/, '');
     const expected = workflowExpectations[action] || workflowExpectations[normalizedAction] || fallbackExpectation;
@@ -93,8 +77,8 @@ export class ActivityLogService {
     return { ...log, count, expected, actual, finding };
   }
 
-  logAction(action: string, page: string, details: string, status: string = 'INFO', user: string = 'admin_4827'): Observable<ActivityLog> {
-    const log: ActivityLog = {
+  trackAction(action: string, page: string, details: string, status: string = 'INFO', user: string = 'admin_4827'): Observable<LiveAction> {
+    const log: LtacAction = {
       user,
       page,
       action,
@@ -110,6 +94,6 @@ export class ActivityLogService {
       ...this.liveActionsSubject.value.slice(0, 29)
     ]);
 
-    return this.addLog(log);
+    return of(liveAction);
   }
 }

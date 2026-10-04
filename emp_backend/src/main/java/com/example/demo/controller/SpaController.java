@@ -11,7 +11,6 @@ public class SpaController {
         "/login",
         "/show-all-employees",
         "/add-employee",
-        "/activity-log",
         "/updating-by-id/{id}",
         "/details-of-employee/{id}"
     })

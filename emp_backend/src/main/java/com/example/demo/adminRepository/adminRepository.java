@@ -7,5 +7,4 @@ import com.example.demo.adminModel.adminModel;
 
 @Repository
 public interface adminRepository extends JpaRepository<adminModel, Long> {
-
 }

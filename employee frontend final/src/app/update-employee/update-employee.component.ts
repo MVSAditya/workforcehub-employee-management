@@ -3,7 +3,7 @@ import { Employee } from '../employee';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../employee.service';
 import { ActivatedRoute } from '@angular/router';
-import { ActivityLogService } from '../activity-log.service';
+import { LtacService } from '../ltac.service';
 
 @Component({
   selector: 'app-update-employee',
@@ -19,7 +19,7 @@ export class UpdateEmployeeComponent {
     private employeeService: EmployeeService,
     private route: ActivatedRoute,
     private router: Router,
-    private activityLogService: ActivityLogService
+    private ltacService: LtacService
   ) {
     this.id = 0;
   }
@@ -27,7 +27,7 @@ export class UpdateEmployeeComponent {
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
 
-    this.activityLogService.logAction(
+    this.ltacService.trackAction(
       'OPEN_UPDATE_FORM',
       `/updating-by-id/${this.id}`,
       `Opening update form for employee ${this.id}`,
@@ -40,7 +40,7 @@ export class UpdateEmployeeComponent {
       },
       error: (err) => {
         console.log(err);
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'OPEN_UPDATE_FORM_FAILED',
           `/updating-by-id/${this.id}`,
           `Could not load employee ${this.id} for update`,
@@ -51,7 +51,7 @@ export class UpdateEmployeeComponent {
   }
 
   onSubmit() {
-    this.activityLogService.logAction(
+    this.ltacService.trackAction(
       'UPDATE_EMPLOYEE_ATTEMPT',
       `/updating-by-id/${this.id}`,
       `Updating employee ${this.id}`,
@@ -60,7 +60,7 @@ export class UpdateEmployeeComponent {
 
     this.employeeService.updateEmployee(this.id, this.employee).subscribe({
       next: (data) => {
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'UPDATE_EMPLOYEE_SUCCESS',
           `/updating-by-id/${this.id}`,
           `Employee ${this.id} updated successfully`,
@@ -70,7 +70,7 @@ export class UpdateEmployeeComponent {
       },
       error: (err) => {
         console.log(err);
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'UPDATE_EMPLOYEE_FAILED',
           `/updating-by-id/${this.id}`,
           `Failed to update employee ${this.id}`,

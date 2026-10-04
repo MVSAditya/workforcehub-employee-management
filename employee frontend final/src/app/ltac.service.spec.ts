@@ -1,12 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { ActivityLog } from './activity-log';
-import { ActivityLogService } from './activity-log.service';
-import { AdminAuthService } from './admin-auth.service';
+import { LtacAction } from './ltac-action';
+import { LtacService } from './ltac.service';
 
-describe('ActivityLogService workflow assessment', () => {
-  let service: ActivityLogService;
+describe('LtacService workflow assessment', () => {
+  let service: LtacService;
 
-  const makeLog = (overrides: Partial<ActivityLog> = {}): ActivityLog => ({
+  const makeLog = (overrides: Partial<LtacAction> = {}): LtacAction => ({
     user: 'admin_4827',
     page: '/show-all-employees',
     action: 'VIEW_EMPLOYEE_LIST',
@@ -17,10 +15,7 @@ describe('ActivityLogService workflow assessment', () => {
   });
 
   beforeEach(() => {
-    service = new ActivityLogService(
-      {} as HttpClient,
-      { isAuthenticated: false } as AdminAuthService
-    );
+    service = new LtacService();
   });
 
   it('flags a failed backend action as an error against its expected workflow', () => {
@@ -71,7 +66,14 @@ describe('ActivityLogService workflow assessment', () => {
   it('flags action types without an expectation rule for review', () => {
     const result = service.evaluateAction(makeLog({ action: 'UNMAPPED_ACTION' }), 5);
 
-    expect(result.expected).toContain('not been configured');
+    expect(result.expected).toContain('Define an expected workflow');
     expect(result.finding).toBe('WARNING');
+  });
+
+  it('keeps tracked actions in memory for LTAC without requiring a backend', () => {
+    service.trackAction('PAGE_VIEW', '/home', 'Opened home page').subscribe();
+
+    expect(service.getSessionActions()).toHaveSize(1);
+    expect(service.getSessionActions()[0].page).toBe('/home');
   });
 });

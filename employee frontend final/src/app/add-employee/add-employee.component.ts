@@ -3,7 +3,7 @@ import { Employee } from '../employee';
 import { EmployeeService } from '../employee.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { ActivityLogService } from '../activity-log.service';
+import { LtacService } from '../ltac.service';
 
 @Component({
   selector: 'app-add-employee',
@@ -15,14 +15,14 @@ export class AddEmployeeComponent {
   constructor(
     private employeeService: EmployeeService,
     private router: Router,
-    private activityLogService: ActivityLogService
+    private ltacService: LtacService
   ) { }
 
   submitform!: NgForm;
   employee: Employee = new Employee();
 
   saveEmployee() {
-    this.activityLogService.logAction(
+    this.ltacService.trackAction(
       'ADD_EMPLOYEE_ATTEMPT',
       '/add-employee',
       `Submitting employee: ${this.employee.fname} ${this.employee.lname}`,
@@ -32,7 +32,7 @@ export class AddEmployeeComponent {
     this.employeeService.addEmployee(this.employee).subscribe({
       next: (data) => {
         console.log(data);
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'ADD_EMPLOYEE_SUCCESS',
           '/add-employee',
           `Employee ${this.employee.fname} ${this.employee.lname} was added successfully`,
@@ -42,7 +42,7 @@ export class AddEmployeeComponent {
       },
       error: (err) => {
         console.log(err);
-        this.activityLogService.logAction(
+        this.ltacService.trackAction(
           'ADD_EMPLOYEE_FAILED',
           '/add-employee',
           `Failed to add employee ${this.employee.fname} ${this.employee.lname}`,
@@ -63,7 +63,7 @@ export class AddEmployeeComponent {
 
     if (!this.employee.fname || !this.employee.lname || !this.employee.email || !this.employee.department || !this.employee.designation || !this.employee.joiningDate) {
       console.warn('Form is incomplete. Please fill all required fields.');
-      this.activityLogService.logAction(
+      this.ltacService.trackAction(
         'ADD_EMPLOYEE_INVALID',
         '/add-employee',
         'Submission blocked because required employee fields were missing',
@@ -76,7 +76,6 @@ export class AddEmployeeComponent {
     this.saveEmployee();
   }
 }
-
 
 
 
